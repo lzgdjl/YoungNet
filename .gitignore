@@ -27,3 +27,6 @@
 *.exe
 *.out
 *.app
+
+test/*.o
+test/Mutex_test
