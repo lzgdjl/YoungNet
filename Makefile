@@ -2,7 +2,7 @@ CXX=g++
 CXXFLAGS=-std=c++11 -ggdb -Wall -pthread -I.
 CXXLIBS=-lpthread
 LDFLAGS=-L.
-CXXOBJS=Mutex.o
+CXXOBJS=Mutex.o Thread.o
 AR=ar
 CXXTESTS=$(shell find test -name "*.cpp")
 TESTS=${CXXTESTS:.cpp=}
