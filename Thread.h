@@ -16,7 +16,7 @@ namespace YoungNet
 		~Thread() noexcept;
 
 		void Start();
-		pid_t GetTid();
+		static pid_t GetTid();
 		
 		Thread(const Thread&) = delete;
 		Thread& operator=(const Thread&) = delete;
