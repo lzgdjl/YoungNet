@@ -31,3 +31,4 @@
 test/*.o
 test/Mutex_test
 test/Thread_test
+test/Logger_test
