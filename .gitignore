@@ -34,3 +34,4 @@ test/Thread_test
 test/Logger_test
 test/CondVar_test
 test/Queue_test
+test/Atomic_test
