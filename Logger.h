@@ -30,6 +30,8 @@ namespace YoungNet
 		fprintf(stderr, "[WARN  ][%s:%d][%d][%s]" fmt "\n", __FILE__, __LINE__, Thread::GetTid(), ReadableTime().c_str(), ##__VA_ARGS__)
 	#define  LOG_ERROR_WRITE(fmt, ...) if (GetLogLevel() <= LogLevel::ERROR) \
 		fprintf(stderr, "[ERROR ][%s:%d][%d][%s]" fmt "\n", __FILE__, __LINE__, Thread::GetTid(), ReadableTime().c_str(), ##__VA_ARGS__)
+	#define LOG_FATAL(fmt, ...) \
+		fprintf(stderr, "[FATAL ][%s:%d][%d][%s]" fmt "\n", __FILE__, __LINE__, Thread::GetTid(), ReadableTime().c_str(), ##__VA_ARGS__); exit(1)
 
 } // namespace YoungNet
 

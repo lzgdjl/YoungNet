@@ -8,7 +8,7 @@ namespace YoungNet
 	{
 	}
 
-	InetAddress::InetAddress(Port port)
+	InetAddress::InetAddress(PortType port)
 	{
 		memset(&sk_, 0, sizeof(sk_));
 		sk_.sin_family = AF_INET;
@@ -16,7 +16,7 @@ namespace YoungNet
 		sk_.sin_port = htons(port);
 	}
 
-	InetAddress::InetAddress(const std::string& ip, Port port)
+	InetAddress::InetAddress(const std::string& ip, PortType port)
 	{
 		memset(&sk_, 0, sizeof(sk_));
 		inet_addr_.sin_family = AF_INET;
@@ -24,7 +24,7 @@ namespace YoungNet
 		::inet_pton(AF_INET, ip.c_str(), &sk_.sin_addr);
 	}
 
-	InetAddress::Port Port() const
+	InetAddress::PortType Port() const
 	{
 		return ntohs(sk_.sin_port);
 	}

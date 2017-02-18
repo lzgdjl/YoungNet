@@ -19,14 +19,14 @@ namespace YoungNet
 		void Listen();
 		int Accept(InetAddress* peer);
 		
-		void SetTcpNoDelay(bool option);
-		void SetReuseAddr(bool option);
-		void SetReusePort(bool option);
-		void SetKeepAlive(bool option);
+		void SetTcpNoDelay();
+		void SetReuseAddr();
+		void SetReusePort();
+		void SetKeepAlive();
 		
 		int Fd() const;
 		
-		static int CreateSocketNonBlock();
+		static int CreateSocketNonblock();
 		static int Connect(int fd, const struct sockaddr_in& peer);
 		static struct sockaddr_in GetSocketAddr(int sockfd);
 		static struct sockaddr_in GetLocalSocketAddr(int fd);
