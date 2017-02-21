@@ -25,19 +25,19 @@ namespace YoungNet
 		Buffer(Buffer&& other);
 		~Buffer();
 
-		const Buffer& operator=(const Buffer&other);
-		const Buffer& operator=(Buffer& rhs);
+		Buffer& operator=(const Buffer& other);
+		Buffer& operator=(Buffer&& rhs);
 		
 		Buffer* PopFront(size_t size);
 		void RemoveFront(size_t size);
 		
-		char* Data(int pos=0);
-		const char* data(int pos=0) const;
+		char* Data(size_t pos=0);
+		const char* Data(size_t pos=0) const;
 		size_t Hash() const;
 
 		char* Blank();
 		
-		uint32_t Size();
+		size_t Size() const;
 		void SetSize(size_t size);
 		size_t BlankSize() const;
 		size_t Capacity() const;
@@ -61,8 +61,8 @@ namespace YoungNet
 		};
 
 	private:
-		void ShallowCopy(const Buffer& other);
-		void ShallowCopy(Buffer&& other);
+		void DeepCopy(const Buffer& other);
+		void DeepCopy(Buffer&& other);
 		void Free();
 		void Clone();
 
