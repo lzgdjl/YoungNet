@@ -39,8 +39,9 @@ namespace YoungNet
 		void HandleError();
 	
 	private:
+		int DefaultCallback();
 		int listenFd_;
-		EventLoop loop_;
+		EventLoop *loop_;
 		int listenEvent_;
 		int returnEvent_;
 
