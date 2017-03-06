@@ -18,6 +18,9 @@ namespace YoungNet
 		void EnableRead();
 		void EnableWrite();
 		void EnableAll();
+		
+		void DisableRead();
+		void DisableWrite();
 		void DisableAll();
 		void RemoveListen();
 		
@@ -42,8 +45,8 @@ namespace YoungNet
 		int DefaultCallback();
 		int listenFd_;
 		EventLoop *loop_;
-		int listenEvent_;
-		int returnEvent_;
+		int events_;
+		int revents_;
 
 		HandleCallback readCallback_;
 		HandleCallback writeCallback_;
