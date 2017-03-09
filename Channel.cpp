@@ -12,9 +12,9 @@ namespace YoungNet
 		events_(0),
 		revents_(0)
 	{
-		SetReadCallback(std::bind(DefaultCallback, this));
-		SetWriteCallback(std::bind(DefaultCallback, this));
-		SetCloseCallback(std::bind(DefaultCallback, this));
+		SetReadCallback(std::bind(&Channel::DefaultCallback, this));
+		SetWriteCallback(std::bind(&Channel::DefaultCallback, this));
+		SetCloseCallback(std::bind(&Channel::DefaultCallback, this));
 	}
 	
 	
@@ -93,28 +93,35 @@ namespace YoungNet
 
     void Channel::HandleRead()
 	{
-		if (readCallback_ < 0)
+		int ret = readCallback_();
+		if (ret < 0)
 		{
-			closeCallback_;
+			closeCallback_();
 		}
 	}	
 
 	void Channel::HandleWrite()
 	{
-		if (writeCallback_ < 0)
+		int ret = writeCallback_();
+		if (ret < 0)
 		{
-			closeCallback_;
+			closeCallback_();
 		}
 	}
 
 	void Channel::HandleClose()
 	{
-		closeCallback_;
+		closeCallback_();
 	}
 
 	void Channel::HandleError()
 	{
-		closeCallback_;
+		closeCallback_();
+	}
+	
+	int Channel::DefaultCallback()
+	{
+		return 0;
 	}
 }
 

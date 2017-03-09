@@ -2,6 +2,7 @@
 #define __YOUNG_NET_EVENTLOOP_H__
 
 #include <vector>
+#include <set>
 
 struct epoll_event;
 
@@ -28,7 +29,7 @@ namespace YoungNet
 	private:
 		std::vector<Channel*> GetReadyChannel();
 
-		int efd_;
+		int epfd_;
 		std::vector<struct epoll_event> readyEvent_;
 		std::set<Channel*> channelContainer_;				
 	};

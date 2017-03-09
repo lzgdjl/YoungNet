@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <unistd.h>
+#include <sys/epoll.h>
 
 #include "EventLoop.h"
 #include "Channel.h"
@@ -10,7 +11,7 @@ namespace YoungNet
 	EventLoop::EventLoop()
 	{
 		epfd_ = epoll_create(1024);
-		if (epfd < 0)
+		if (epfd_ < 0)
 		{
 			fprintf(stderr, "cannot create epoll fd\n");
 			exit(1);
@@ -24,7 +25,7 @@ namespace YoungNet
 		close(epfd_);
 	}
 
-	void EventLoop::UpdateChannel(Channel* chan)
+	void EventLoop::UpdateChannel(const Channel* chan)
 	{
 		int event = 0;
 		if (chan->events_ & 1)
@@ -39,37 +40,37 @@ namespace YoungNet
 		
 		struct epoll_event ev;
 		ev.events = event;
-		ev.data.ptr = chan;	
-		auto it = channelContainer_.find(chan);
+		ev.data.ptr = (void*)chan;	
+		auto it = channelContainer_.find(const_cast<Channel*>(chan));
 		if (it != channelContainer_.end())
 		{
 			
-			if (epoll_ctl(epfd_, EPOLL_CTL_MOD, chan.listenFd_, &ev) != 0)
+			if (epoll_ctl(epfd_, EPOLL_CTL_MOD, chan->listenFd_, &ev) != 0)
 			{
 				LOG_ERROR_WRITE("modify epoll failed. error: %s\n", strerror(errno));
 			}
 		}
 		else
 		{
-			if (epoll_ctl(epfd_, EPOLL_CTL_ADD, chan.listenFd_, &ev) != 0)
+			if (epoll_ctl(epfd_, EPOLL_CTL_ADD, chan->listenFd_, &ev) != 0)
 			{
 				LOG_ERROR_WRITE("add epoll failed. error: %s\n", strerror(errno));
 			}	
 		}
 	}
 
-	void EventLoop::RemoveChannel(Channel* chan)
+	void EventLoop::RemoveChannel(const Channel* chan)
 	{
 		struct epoll_event ev;
-		ev.events = event;
-		ev.data.ptr = chan;
+		ev.events = chan->events_;
+		ev.data.ptr = (void*)chan;
 		if (epoll_ctl(epfd_, EPOLL_CTL_DEL, chan->listenFd_, &ev) != 0)
 		{
 			LOG_ERROR_WRITE("delete epoll failed. error: %s\n", strerror(errno));
 		}
 	}
 	
-	std::vector<Channel*> GetReadyChannel()
+	std::vector<Channel*> EventLoop::GetReadyChannel()
 	{
 		std::vector<Channel*> result;
 
@@ -82,11 +83,11 @@ namespace YoungNet
 		for (int i = 0; i < nfds; ++i)
 		{
 			Channel* chan = (Channel*)readyEvent_[i].data.ptr;
-			chan.revents_ = readyEvent_[i].events;
+			chan->revents_ = readyEvent_[i].events;
 			result.push_back(chan);
 		}
 
-		if (nfds == readyEvent_.size())
+		if (nfds == (int)readyEvent_.size())
 		{
 			readyEvent_.reserve(readyEvent_.size()*2);
 		}
@@ -101,7 +102,7 @@ namespace YoungNet
 			std::vector<Channel*> result = GetReadyChannel();
 			for (auto it = result.begin(); it != result.end(); ++it)
 			{
-				it->HandleEvent();
+				(*it)->HandleEvent();
 			}
 		}
 	}

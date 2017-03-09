@@ -5,9 +5,11 @@
 
 namespace YoungNet
 {
-
+	
+	class EventLoop;
 	class Channel
 	{
+	friend class EventLoop;
 	public:
 		Channel(int fd, EventLoop*);
 		Channel(const Channel&) = delete;
@@ -25,7 +27,7 @@ namespace YoungNet
 		void RemoveListen();
 		
 
-		using HandleCallback = std::functional<int()>;
+		using HandleCallback = std::function<int()>;
 
 		void SetReadCallback(const HandleCallback&);
 		void SetReadCallback(HandleCallback&&);
@@ -35,11 +37,13 @@ namespace YoungNet
 
 		void SetCloseCallback(const HandleCallback&);
 		void SetCloseCallback(HandleCallback&&);
+		
 	
 		void HandleRead();
 		void HandleWrite();
 		void HandleClose();
 		void HandleError();
+		void HandleEvent();
 	
 	private:
 		int DefaultCallback();
