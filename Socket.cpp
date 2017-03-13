@@ -51,8 +51,12 @@ namespace YoungNet
 		
 		if (fd < 0)
 		{
-			if (errno == EAGAIN || errno == ECONNABORTED)
+			if (errno == ECONNABORTED)
 				goto retry;
+			else
+			{
+				return -1;
+			}
 		}
 		else
 		{
